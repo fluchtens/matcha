@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
+import { AuthService } from "./auth.service";
 
 export class AuthController {
-  async signIn(req: Request, res: Response) {
-    const body = req.body;
-    const username = body.username;
-    const password = body.password;
+  private authService: AuthService = new AuthService();
 
-    res.send("This is the list of users");
+  async login(req: Request, res: Response): Promise<void> {
+    const body: any = req.body;
+
+    this.authService.login(body, res);
   }
 }

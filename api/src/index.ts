@@ -10,9 +10,9 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.post("/signIn", (req: Request, res: Response) => {
+app.post("/auth/login", (req: Request, res: Response) => {
   const authController = new AuthController();
-  authController.signIn(req, res);
+  authController.login(req, res);
 });
 
 app.listen(port, () => {
