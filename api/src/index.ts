@@ -15,6 +15,11 @@ app.post("/auth/login", (req: Request, res: Response) => {
   authController.login(req, res);
 });
 
+app.post("/auth/signup", (req: Request, res: Response) => {
+  const authController = new AuthController();
+  authController.signup(req, res);
+});
+
 app.listen(port, () => {
   console.log(`Match API listening on port ${port}`);
 });
