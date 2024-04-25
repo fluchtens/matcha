@@ -56,4 +56,18 @@ export class UserModel {
       return null;
     }
   }
+
+  async getAllUsers(): Promise<User[] | []> {
+    try {
+      const query = 'SELECT * FROM "user"';
+      const result = await db.query(query);
+
+      if (result.rows.length <= 0) {
+        return [];
+      }
+      return result.rows;
+    } catch (error) {
+      return [];
+    }
+  }
 }
