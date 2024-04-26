@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import { Response } from "express";
 import { db } from "../database";
 import { UserModel } from "../user/user.model";
@@ -95,9 +96,11 @@ export class AuthService {
       return;
     }
 
+    const hashedPwd = await bcrypt.hash(password, 10);
+
     const query =
       'INSERT INTO "user"(username, email, first_name, last_name, password) VALUES($1, $2, $3, $4, $5)';
-    const values = [username, email, firstName, lastName, password];
+    const values = [username, email, firstName, lastName, hashedPwd];
     await db.query(query, values);
 
     res.status(200).send("User succesfully created.");
