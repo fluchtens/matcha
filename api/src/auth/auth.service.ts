@@ -35,12 +35,31 @@ export class AuthService {
     return { success: true, message: null };
   };
 
+  checkFirstName = (firstName: string) => {
+    if (firstName.length < 3 || firstName.length > 50) {
+      return { success: false, message: "First name must be between 3 and 50 characters long." };
+    }
+    return { success: true, message: null };
+  };
+
+  checkLastName = (lastName: string) => {
+    if (lastName.length < 3 || lastName.length > 50) {
+      return { success: false, message: "Last name must be between 3 and 50 characters long." };
+    }
+    return { success: true, message: null };
+  };
+
   async signup(body: any, res: Response): Promise<void> {
-    const username = body.username.trim();
-    const email = body.email.trim();
-    const firstName = body.first_name.trim();
-    const lastName = body.last_name.trim();
-    const password = body.password.trim();
+    const username = body.username ? body.username.trim() : "";
+    const email = body.email ? body.email.trim() : "";
+    const firstName = body.first_name ? body.first_name.trim() : "";
+    const lastName = body.last_name ? body.last_name.trim() : "";
+    const password = body.password ? body.password.trim() : "";
+
+    if (!username || !email || !firstName || !lastName || !password) {
+      res.status(400).send("There are one or more required fields missing from the form.");
+      return;
+    }
 
     const usernameCheck = this.checkUsername(username);
     if (!usernameCheck.success) {
@@ -51,6 +70,18 @@ export class AuthService {
     const emailCheck = this.checkEmail(email);
     if (!emailCheck.success) {
       res.status(400).send(emailCheck.message);
+      return;
+    }
+
+    const firstNameCheck = this.checkFirstName(firstName);
+    if (!firstNameCheck.success) {
+      res.status(400).send(firstNameCheck.message);
+      return;
+    }
+
+    const lastNameCheck = this.checkLastName(lastName);
+    if (!lastNameCheck.success) {
+      res.status(400).send(lastNameCheck.message);
       return;
     }
 
