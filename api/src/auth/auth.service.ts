@@ -16,8 +16,7 @@ export class AuthService {
     const password = body.password ? body.password.trim() : "";
 
     if (!username || !email || !firstName || !lastName || !password) {
-      res.status(400).send("There are one or more required fields missing from the form.");
-      return;
+      return res.status(400).send("There are one or more required fields missing from the form.");
     }
 
     try {
@@ -26,6 +25,7 @@ export class AuthService {
       signUpDto.email = email;
       signUpDto.firstName = firstName;
       signUpDto.lastName = lastName;
+      signUpDto.password = password;
 
       await validateOrReject(signUpDto);
     } catch (error: any) {
