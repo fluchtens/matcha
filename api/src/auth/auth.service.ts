@@ -3,7 +3,7 @@ import { validateOrReject } from "class-validator";
 import { Response } from "express";
 import { db } from "../database";
 import { UserModel } from "../user/user.model";
-import { SignUpDto } from "./auth.dtos";
+import { LoginDto, SignUpDto } from "./auth.dtos";
 
 export class AuthService {
   private userModel: UserModel = new UserModel();
@@ -50,11 +50,31 @@ export class AuthService {
     return res.status(200).send("User succesfully created.");
   }
 
-  async login(body: any, res: Response): Promise<void> {
+  async login(body: any, res: Response) {
     const username = body.username;
     const password = body.password;
 
-    res.status(200);
-    res.send(`${username} - ${password}`);
+    try {
+      const loginDto = new LoginDto();
+      loginDto.username = username;
+      loginDto.password = password;
+
+      await validateOrReject(loginDto);
+    } catch (error: any) {
+      const message = Object.values(error[0].constraints)[0];
+      return res.status(400).send(message);
+    }
+
+    const user = await this.userModel.getUserByUsername(username);
+    if (!user) {
+      return res.status(401).send("Incorrect username or password.");
+    }
+
+    const matchPwd = await bcrypt.compare(password, user.password);
+    if (!matchPwd) {
+      return res.status(401).send("Incorrect username or password.");
+    }
+
+    return res.status(200).send("User succesfully connected.");
   }
 }
