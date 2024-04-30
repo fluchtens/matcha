@@ -35,6 +35,11 @@ app.post("/auth/signup", (req: Request, res: Response) => {
   authController.signup(req, res);
 });
 
+app.get("/user/profile", (req: Request, res: Response) => {
+  const userController = new UserController();
+  userController.getProfile(req, res);
+});
+
 app.get("/user/all", (req: Request, res: Response) => {
   const userController = new UserController();
   userController.getAllUsers(res);
