@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { validateOrReject } from "class-validator";
-import { Response } from "express";
+import { Request, Response } from "express";
 import { db } from "../database";
 import { UserModel } from "../user/user.model";
 import { LoginDto, SignUpDto } from "./auth.dtos";
@@ -50,7 +50,7 @@ export class AuthService {
     return res.status(200).send("User succesfully created.");
   }
 
-  async login(body: any, res: Response) {
+  async login(body: any, req: Request, res: Response) {
     const username = body.username;
     const password = body.password;
 
@@ -74,6 +74,8 @@ export class AuthService {
     if (!matchPwd) {
       return res.status(401).send("Incorrect username or password.");
     }
+
+    req.session.user = { id: user.id };
 
     return res.status(200).send("User succesfully connected.");
   }

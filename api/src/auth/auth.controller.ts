@@ -13,6 +13,6 @@ export class AuthController {
   async login(req: Request, res: Response): Promise<void> {
     const body: any = req.body;
 
-    this.authService.login(body, res);
+    this.authService.login(body, req, res);
   }
 }
