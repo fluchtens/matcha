@@ -6,9 +6,9 @@ export class UserService {
 
   async getProfile(req: Request, res: Response) {
     const userId = req.session.user?.id;
-    if (!userId) {
-      return res.status(401).send("You are not logged in.");
-    }
+    // if (!userId) {
+    //   return res.status(401).send("You are not logged in.");
+    // }
 
     const user = await this.userModel.getUserById(userId);
     if (!user) {

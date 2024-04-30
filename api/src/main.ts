@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import session from "express-session";
 import { AuthController } from "./auth/auth.controller";
+import { isAuth } from "./auth/auth.middleware";
 import { UserController } from "./user/user.controller";
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(
     },
   })
 );
+
 app.post("/auth/login", (req: Request, res: Response) => {
   const authController = new AuthController();
   authController.login(req, res);
@@ -35,12 +37,12 @@ app.post("/auth/signup", (req: Request, res: Response) => {
   authController.signup(req, res);
 });
 
-app.get("/user/profile", (req: Request, res: Response) => {
+app.get("/user/profile", isAuth, (req: Request, res: Response) => {
   const userController = new UserController();
   userController.getProfile(req, res);
 });
 
-app.get("/user/all", (req: Request, res: Response) => {
+app.get("/user/all", isAuth, (req: Request, res: Response) => {
   const userController = new UserController();
   userController.getAllUsers(res);
 });
