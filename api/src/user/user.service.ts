@@ -12,7 +12,7 @@ export class UserService {
 
     const user = await this.userModel.getUserById(userId);
     if (!user) {
-      return res.status(401).send("User not found.");
+      return res.status(404).send("User not found.");
     }
     return res.status(200).send(user);
   }
