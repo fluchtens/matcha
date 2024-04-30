@@ -1,7 +1,4 @@
 # matcha
 
 ### What's this about?
-Dating website made for 42.
-
-### Installation :
-- Clone the repository.
+Dating web application in Next.js and Node.js/Express.js made for 42.
