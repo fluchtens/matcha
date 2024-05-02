@@ -38,6 +38,23 @@ services:
       - matcha_network
     restart: always
 
+  client:
+    container_name: matcha-client
+    image: matcha-client
+    build:
+      context: ./client
+      dockerfile: dev.Dockerfile
+    depends_on:
+      - api
+    ports:
+      - 5173:5173
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    networks:
+      - matcha_network
+    restart: always
+
 networks:
   matcha_network:
     name: matcha_network
