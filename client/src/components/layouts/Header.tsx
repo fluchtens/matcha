@@ -1,6 +1,7 @@
 "use server";
 
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 export const Header = async () => {
   return (
@@ -11,6 +12,7 @@ export const Header = async () => {
             <h1 className="text-lg md:text-xl font-medium">matcha</h1>
           </Link>
         </div>
+        <Button variant="default">Log in</Button>
       </div>
     </header>
   );
