@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, { Request, Response } from "express";
 import session from "express-session";
 import { AuthController } from "./auth/auth.controller";
@@ -12,6 +13,13 @@ declare module "express-session" {
     user: { id: number };
   }
 }
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
