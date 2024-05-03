@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { getAllUsersApi } from "./api";
 
 export async function loginApi(username: string, password: string) {
   try {
-    const url = "http:://localhost:3000/auth/login";
+    const url = "http://localhost:3000/auth/login";
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -15,12 +14,14 @@ export async function loginApi(username: string, password: string) {
     });
 
     const data = await response.json();
-    console.log(data);
+    if (!response.ok) {
+      return { success: false, message: data.message };
+    }
 
-    return null;
+    return { success: true, message: data.message };
   } catch (error) {
     console.log(error);
-    return null;
+    return { success: false, message: "An error occurred while processing your request." };
   }
 }
 
@@ -39,8 +40,7 @@ export default function LoginBtn() {
   const handleSubmit = (e: React.FormEvent) => {
     const submitData = async () => {
       if (username && password) {
-        // const response = await loginApi(username, password);
-        const response = await getAllUsersApi();
+        const response = await loginApi(username, password);
         console.log(response);
       }
     };

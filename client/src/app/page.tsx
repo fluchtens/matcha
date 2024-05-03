@@ -1,9 +1,11 @@
+"use server";
+
 import LoginBtn from "@/app/LoginBtn";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="p-4">
-      <LoginBtn></LoginBtn>
+      <LoginBtn />
     </main>
   );
 }

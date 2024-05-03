@@ -16,7 +16,9 @@ export class AuthService {
     const password = body.password ? body.password.trim() : "";
 
     if (!username || !email || !firstName || !lastName || !password) {
-      return res.status(400).send("There are one or more required fields missing from the form.");
+      return res
+        .status(400)
+        .json({ message: "There are one or more required fields missing from the form." });
     }
 
     try {
@@ -30,15 +32,15 @@ export class AuthService {
       await validateOrReject(signUpDto);
     } catch (error: any) {
       const message = Object.values(error[0].constraints)[0];
-      return res.status(400).send(message);
+      return res.status(400).json({ message: message });
     }
 
     if (await this.userModel.getUserByUsername(username)) {
-      return res.status(409).send("This username is already taken.");
+      return res.status(409).json({ message: "This username is already taken." });
     }
 
     if (await this.userModel.getUserByEmail(email)) {
-      return res.status(409).send("This email is already taken.");
+      return res.status(409).json({ message: "This email is already taken." });
     }
 
     const hashedPwd = await bcrypt.hash(password, 10);
@@ -47,7 +49,7 @@ export class AuthService {
     const values = [username, email, firstName, lastName, hashedPwd];
     await db.query(query, values);
 
-    return res.status(200).send("User succesfully created.");
+    return res.status(200).json({ message: "User succesfully created." });
   }
 
   async login(body: any, req: Request, res: Response) {
@@ -62,21 +64,21 @@ export class AuthService {
       await validateOrReject(loginDto);
     } catch (error: any) {
       const message = Object.values(error[0].constraints)[0];
-      return res.status(400).send(message);
+      return res.status(400).json({ message: message });
     }
 
     const user = await this.userModel.getUserByUsername(username);
     if (!user) {
-      return res.status(401).send("Incorrect username or password.");
+      return res.status(401).json({ message: "Incorrect username or password." });
     }
 
     const matchPwd = await bcrypt.compare(password, user.password);
     if (!matchPwd) {
-      return res.status(401).send("Incorrect username or password.");
+      return res.status(401).json({ message: "Incorrect username or password." });
     }
 
     req.session.user = { id: user.id };
 
-    return res.status(200).send("User succesfully connected.");
+    return res.status(200).json({ message: "User succesfully connected." });
   }
 }
